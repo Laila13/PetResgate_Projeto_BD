@@ -1,0 +1,83 @@
+# Etapa 1 — Definição do Problema
+
+## Nome do SBD
+**PetResgate** — Sistema para ONG de Resgate e Adoção de Animais
+
+## Desenvolvimento
+> Preencher com nomes completos e matrícula dos componentes do grupo.
+
+- Fulano de Tal — Matrícula: XX.X.XXXX
+- Ciclana de Tal — Matrícula: XX.X.XXXX
+
+## Sobre o Projeto
+
+O **PetResgate** é um Sistema de Banco de Dados (SBD) desktop, desenvolvido em
+**Python**, destinado a apoiar a rotina de uma ONG de resgate e adoção de
+animais. O sistema cobre todo o fluxo do animal desde o resgate até a adoção
+definitiva: cadastro do animal resgatado, acompanhamento médico (vacinas,
+cirurgias, consultas), encaminhamento a lares temporários (voluntários),
+cadastro de possíveis adotantes, registro das visitas de interesse e, por
+fim, o registro formal da adoção.
+
+O acesso ao Sistema Gerenciador de Banco de Dados (SGBD) é feito
+exclusivamente por meio de uma interface gráfica desktop (Tkinter),
+utilizando comandos SQL escritos manualmente através do driver `sqlite3`
+da biblioteca padrão do Python — sem uso de ORM, APIs ou qualquer biblioteca
+que substitua a escrita de SQL. O driver é usado apenas para abrir a conexão
+e executar os comandos SQL construídos pela aplicação.
+
+## Requisitos (Regras de Negócio)
+
+### RN01 — Animais Resgatados
+- Todo animal resgatado deve ser cadastrado com: nome (ou identificação
+  provisória), espécie, raça (se conhecida), porte (pequeno, médio, grande),
+  sexo, data do resgate, local do resgate, status atual e observações
+  gerais de saúde no momento do resgate.
+- O status do animal deve refletir seu estágio no fluxo: `resgatado`,
+  `em_tratamento`, `disponivel` (para adoção), `em_lar_temporario` ou
+  `adotado`.
+
+### RN02 — Prontuário Médico
+- Cada atendimento veterinário (vacina, cirurgia, consulta ou exame) gera um
+  registro de prontuário vinculado a um único animal e a um único
+  veterinário responsável.
+- O prontuário deve registrar o tipo de atendimento, a data, uma descrição
+  e, quando aplicável (vacinas), a data prevista para a próxima dose.
+- Um veterinário pode ser responsável por diversos atendimentos, para vários
+  animais diferentes.
+
+### RN03 — Lares Temporários
+- Um lar temporário é cadastrado a partir dos dados do voluntário
+  responsável (nome, endereço, telefone), com uma capacidade máxima de
+  animais e um indicador se está atualmente ativo para receber animais.
+- Um animal pode passar por diversos lares temporários ao longo do tempo, e
+  um lar temporário pode acolher diversos animais (simultaneamente ou em
+  momentos diferentes) — é necessário registrar o **histórico** de
+  abrigamento (data de entrada e, quando houver, data de saída) de cada
+  animal em cada lar.
+
+### RN04 — Adotantes e Visitas
+- Um adotante em potencial é cadastrado com nome, CPF (único), endereço,
+  telefone e e-mail.
+- Antes da adoção, o adotante pode realizar uma ou mais visitas para
+  conhecer um ou mais animais disponíveis. Cada visita registra a data, o
+  animal visitado, observações e o resultado (`interessado`,
+  `nao_interessado` ou `pendente`).
+
+### RN05 — Adoção
+- A adoção formaliza o vínculo entre um adotante e um animal, registrando a
+  data da adoção, se o termo de responsabilidade foi assinado e o status da
+  adoção (`ativa` ou `devolvida`).
+- Um animal só pode estar com **uma adoção ativa** por vez, mas pode ter
+  passado por mais de uma adoção ao longo de sua história (em caso de
+  devolução e nova adoção).
+- Ao concluir uma adoção, o status do animal deve ser atualizado para
+  `adotado`.
+
+### RN06 — Consultas
+O sistema deve permitir, entre outras, as seguintes consultas:
+- Listar animais por status (ex.: animais disponíveis para adoção).
+- Consultar o histórico médico completo de um animal.
+- Consultar em qual lar temporário um animal está atualmente.
+- Consultar o histórico de adoções de um adotante.
+- Consultar as visitas realizadas a um determinado animal.
