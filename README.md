@@ -43,7 +43,7 @@ cd app
 python3 main.py
 ```
 
--**Criação e Carga Inicial (Seed):** Na primeira execução, o sistema detecta a ausência do banco, cria o arquivo petresgate.db na raiz do projeto a partir do script sql/01_schema.sql e insere os dados de teste pré-cadastrados através do script sql/02_seed.sql.
+- **Criação e Carga Inicial (Seed):** Na primeira execução, o sistema detecta a ausência do banco, cria o arquivo petresgate.db na raiz do projeto a partir do script sql/01_schema.sql e insere os dados de teste pré-cadastrados através do script sql/02_seed.sql.
 
 - **Como Resetar o Banco de Dados:** Para restaurar o banco ao seu estado inicial de testes durante as avaliações, basta fechar a aplicação, apagar o arquivo petresgate.db (gerado na raiz) e executar o comando de inicialização novamente.
 
