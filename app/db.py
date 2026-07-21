@@ -15,17 +15,18 @@ def get_connection():
 
 
 def init_db(seed: bool = False):
-    """Cria o banco de dados a partir do script DDL. Se seed=True e o banco
-    ainda não existir, também executa o script de povoamento inicial."""
+    """Cria o banco de dados a partir do script DDL se ainda não existir.
+    Se seed=True e o banco estiver sendo criado agora, executa o povoamento inicial."""
     is_new = not os.path.exists(DB_PATH)
-    conn = get_connection()
-    with open(SCHEMA_PATH, encoding="utf-8") as f:
-        conn.executescript(f.read())
-    if seed and is_new:
-        with open(SEED_PATH, encoding="utf-8") as f:
+    if is_new:
+        conn = get_connection()
+        with open(SCHEMA_PATH, encoding="utf-8") as f:
             conn.executescript(f.read())
-    conn.commit()
-    conn.close()
+        if seed:
+            with open(SEED_PATH, encoding="utf-8") as f:
+                conn.executescript(f.read())
+        conn.commit()
+        conn.close()
 
 
 def execute(sql: str, params: tuple = ()):
@@ -203,3 +204,5 @@ def listar_adocoes(id_adotante=None):
         params = (id_adotante,)
     sql += " ORDER BY ado.data_adocao DESC"
     return query(sql, params)
+
+
