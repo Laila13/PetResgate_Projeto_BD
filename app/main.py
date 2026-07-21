@@ -107,6 +107,7 @@ class AbaAnimais(ttk.Frame):
         self.tree = make_tree(tree_frame, cols)
 
         self.consultar()
+        self.bind("<Visibility>", lambda e: self.consultar())
 
     def salvar(self):
         try:
@@ -180,12 +181,17 @@ class AbaProntuarios(ttk.Frame):
 
         consulta = ttk.Frame(self)
         consulta.pack(side="right", fill="both", expand=True, padx=8, pady=8)
-        ttk.Button(consulta, text="Atualizar lista", command=self.consultar).pack(anchor="w")
+        ttk.Button(consulta, text="Atualizar lista", command=self.ao_exibir).pack(anchor="w")
         tree_frame = ttk.Frame(consulta)
         tree_frame.pack(fill="both", expand=True, pady=6)
         cols = ("id_prontuario", "animal", "veterinario", "data_atendimento", "tipo", "descricao", "proxima_dose")
         self.tree = make_tree(tree_frame, cols)
 
+        self.atualizar_combos()
+        self.consultar()
+        self.bind("<Visibility>", lambda e: self.ao_exibir())
+
+    def ao_exibir(self):
         self.atualizar_combos()
         self.consultar()
 
@@ -268,12 +274,17 @@ class AbaLares(ttk.Frame):
 
         consulta = ttk.Frame(self)
         consulta.pack(side="right", fill="both", expand=True, padx=8, pady=8)
-        ttk.Button(consulta, text="Atualizar lista de abrigamentos", command=self.consultar).pack(anchor="w")
+        ttk.Button(consulta, text="Atualizar lista de abrigamentos", command=self.ao_exibir).pack(anchor="w")
         tree_frame = ttk.Frame(consulta)
         tree_frame.pack(fill="both", expand=True, pady=6)
         cols = ("id_abrigamento", "animal", "lar", "data_entrada", "data_saida")
         self.tree = make_tree(tree_frame, cols)
 
+        self.atualizar_combos()
+        self.consultar()
+        self.bind("<Visibility>", lambda e: self.ao_exibir())
+
+    def ao_exibir(self):
         self.atualizar_combos()
         self.consultar()
 
@@ -364,12 +375,17 @@ class AbaAdotantesVisitas(ttk.Frame):
 
         consulta = ttk.Frame(self)
         consulta.pack(side="right", fill="both", expand=True, padx=8, pady=8)
-        ttk.Button(consulta, text="Atualizar lista de visitas", command=self.consultar).pack(anchor="w")
+        ttk.Button(consulta, text="Atualizar lista de visitas", command=self.ao_exibir).pack(anchor="w")
         tree_frame = ttk.Frame(consulta)
         tree_frame.pack(fill="both", expand=True, pady=6)
         cols = ("id_visita", "adotante", "animal", "data_visita", "observacoes", "resultado")
         self.tree = make_tree(tree_frame, cols)
 
+        self.atualizar_combos()
+        self.consultar()
+        self.bind("<Visibility>", lambda e: self.ao_exibir())
+
+    def ao_exibir(self):
         self.atualizar_combos()
         self.consultar()
 
@@ -440,12 +456,17 @@ class AbaAdocoes(ttk.Frame):
 
         consulta = ttk.Frame(self)
         consulta.pack(side="right", fill="both", expand=True, padx=8, pady=8)
-        ttk.Button(consulta, text="Atualizar lista de adoções", command=self.consultar).pack(anchor="w")
+        ttk.Button(consulta, text="Atualizar lista de adoções", command=self.ao_exibir).pack(anchor="w")
         tree_frame = ttk.Frame(consulta)
         tree_frame.pack(fill="both", expand=True, pady=6)
         cols = ("id_adocao", "animal", "adotante", "data_adocao", "termo_assinado", "status")
         self.tree = make_tree(tree_frame, cols)
 
+        self.atualizar_combos()
+        self.consultar()
+        self.bind("<Visibility>", lambda e: self.ao_exibir())
+
+    def ao_exibir(self):
         self.atualizar_combos()
         self.consultar()
 
@@ -465,8 +486,7 @@ class AbaAdocoes(ttk.Frame):
             id_adotante = self.adotante_map[self.adotante_cb.get()]
             db.inserir_adocao(id_animal, id_adotante, self.data_v.get(), int(self.termo_v.get()))
             messagebox.showinfo("Sucesso", "Adoção registrada com sucesso!")
-            self.atualizar_combos()
-            self.consultar()
+            self.ao_exibir()
         except KeyError:
             messagebox.showerror("Erro", "Selecione um animal e um adotante válidos.")
         except sqlite3.Error as e:
